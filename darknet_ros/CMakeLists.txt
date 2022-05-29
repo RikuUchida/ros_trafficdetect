@@ -22,7 +22,7 @@ if (CUDA_FOUND)
     CUDA_NVCC_FLAGS
     ${CUDA_NVCC_FLAGS};
     -O3
-    -gencode arch=compute_86,code=sm_86
+    -gencode arch=compute_75,code=sm_75
   )
   add_definitions(-DGPU)
 else()
@@ -251,38 +251,13 @@ install(
   FILES_MATCHING PATTERN "*.h"
 )
 
-# Download yolov2-tiny.weights
-set(PATH "${CMAKE_CURRENT_SOURCE_DIR}/yolo_network_config/weights")
-set(FILE "${PATH}/yolov2-tiny.weights")
-message(STATUS "Checking and downloading yolov2-tiny.weights if needed ...")
-if (NOT EXISTS "${FILE}")
-  message(STATUS "... file does not exist. Downloading now ...")
-  execute_process(COMMAND wget http://pjreddie.com/media/files/yolov2-tiny.weights -P ${PATH})
-endif()
-
-# Download yolov3.weights
-set(FILE "${PATH}/yolov3.weights")
-message(STATUS "Checking and downloading yolov3.weights if needed ...")
-if (NOT EXISTS "${FILE}")
-  message(STATUS "... file does not exist. Downloading now ...")
-  execute_process(COMMAND wget http://pjreddie.com/media/files/yolov3.weights -P ${PATH})
-endif()
-
 #############
 ## Testing ##
 #############
 
 if(CATKIN_ENABLE_TESTING)
-  # Download yolov2.weights
-  set(PATH "${CMAKE_CURRENT_SOURCE_DIR}/yolo_network_config/weights")
-  set(FILE "${PATH}/yolov2.weights")
-  message(STATUS "Checking and downloading yolov2.weights if needed ...")
-  if (NOT EXISTS "${FILE}")
-    message(STATUS "... file does not exist. Downloading now ...")
-    execute_process(COMMAND wget http://pjreddie.com/media/files/yolov2.weights -P ${PATH})
-  endif()
-
-  find_package(rostest REQUIRED)
+  
+    find_package(rostest REQUIRED)
 
   # Object detection in images.
   add_rostest_gtest(${PROJECT_NAME}_object_detection-test
